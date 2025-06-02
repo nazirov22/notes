@@ -1,0 +1,364 @@
+/* Общие стили для body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    background-image: url('../images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Стили для заголовка-ссылки */
+.header-link {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.header-link:hover {
+    text-decoration: underline;
+}
+
+/* Стили для header */
+header {
+    background-color: #6200ea;
+    color: white;
+    height: 60px;
+}
+
+.header-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+header h1 {
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+    order: 2;
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    order: 3;
+}
+
+/* Общие стили для кнопок */
+.btn-custom {
+    background-color: #6200ea;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 10px;
+    border: 1px solid white;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-custom:hover {
+    background-color: #3700b3;
+    color: white;
+}
+
+.exit-btn {
+    background-color: #ff1744;
+    border-color: white;
+    order: 3;
+}
+
+.create-btn {
+    background-color: #6200ea;
+    border-color: white;
+    order: 1;
+}
+
+/* Стили для посадочной страницы */
+.cta {
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.cta p {
+    font-size: 2em;
+    color: #6200ea;
+}
+
+/* Стили для форм регистрации и входа */
+.auth-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form h2 {
+    margin-top: 0;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-form button:hover {
+    background-color: #3700b3;
+}
+
+/* Стили для страницы заметок */
+.notes-app-container {
+    display: flex;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 20px;
+    width: 100%;
+}
+
+.container-notes {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.notes-aside {
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.notes-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    color: #333;
+}
+
+.categories-list {
+    padding: 0;
+    margin: 0;
+}
+
+.categories-list li {
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    font-size: 1rem;
+}
+
+/* Основное содержимое */
+.notes-content {
+    padding-left: 25px;
+    /* Больший отступ от aside */
+}
+
+.notes-search {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    transition: border 0.3s;
+}
+
+.notes-search:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Сетка заметок */
+.notes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notes-aside h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    list-style: none;
+}
+
+.notes-aside ul {
+    list-style: none;
+    padding: 0;
+}
+
+.notes-aside ul li {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.notes-aside ul li:hover {
+    background-color: #f0f0f0;
+}
+
+.notes-aside ul li.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.notes-list-container {
+    padding: 0 15px;
+}
+
+.notes-list input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.note {
+    background-color: white;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+.note h3 {
+    margin: 0 0 10px;
+    font-weight: bold;
+}
+
+.note p {
+    margin: 0 0 10px;
+}
+
+.note .date {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.note .actions {
+    margin-top: 10px;
+}
+
+.note .actions button {
+    margin-right: 5px;
+    text-align: center;
+    border-width: 1px;
+}
+
+/* Стили для страницы редактирования заметки */
+.edit-note-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-note-container input,
+.edit-note-container textarea,
+.edit-note-container select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.edit-note-container button {
+    padding: 10px 20px;
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.edit-note-container button.delete-btn {
+    background-color: #ff1744;
+}
+
+.edit-note-container button:hover {
+    opacity: 0.9;
+}
+
+/* Адаптивные стили */
+@media (max-width: 992px) {
+    .notes-content {
+        padding-left: 0;
+    }
+
+    .notes-aside {
+        margin-bottom: 25px;
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 15px;
+    }
+
+    .notes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .notes-aside {
+        padding: 15px;
+    }
+
+    .notes-search {
+        padding: 10px 15px;
+    }
+}
