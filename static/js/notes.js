@@ -8,14 +8,17 @@ export async function displayNotes(filter = '', category_id = null) {
     }
     notesContainer.innerHTML = '';
 
-    const user_id = localStorage.getItem('user_id');
+    const user_id = getCookie('user_id');
     if (!user_id) {
         alert('Пожалуйста, войдите в систему');
         redirectTo('login.html');
         return;
     }
 
-    let url = `http://localhost:5000/notes?user_id=${user_id}`;
+    // let url = `http://localhost:5000/notes?user_id=${user_id}`;
+    let url = `/notes?user_id=${user_id}`;
+
+
     if (filter) url += `&search_query=${encodeURIComponent(filter)}`;
     if (category_id) url += `&category_id=${category_id}`;
 
@@ -39,13 +42,26 @@ export async function displayNotes(filter = '', category_id = null) {
     });
 }
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
 export function editNote(id) {
     redirectTo(`edit-note.html?id=${id}`);
 }
 
 export async function deleteNote(id) {
     if (confirm('Вы уверены, что хотите удалить эту заметку?')) {
-        await fetch(`http://localhost:5000/notes/${id}`, { method: 'DELETE' });
+        const user_id = getCookie('user_id');
+        // await fetch(`http://localhost:5000/notes/${id}`, {
+        await fetch(`/notes/${id}`, {
+
+            method: 'DELETE',
+            headers: { 'user-id': user_id }
+        });
         displayNotes();
     }
 }
@@ -54,8 +70,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     const searchInput = document.getElementById('searchInput');
     const categoriesContainer = document.getElementById('categories');
 
-    // Загрузка категорий
-    const response = await fetch('http://localhost:5000/categories');
+    // const response = await fetch('http://localhost:5000/categories');
+    const response = await fetch('/categories');
+
+
     const categories = await response.json();
     categoriesContainer.innerHTML = '';
     categories.forEach(cat => {
@@ -85,6 +103,4 @@ document.addEventListener('DOMContentLoaded', async function () {
             displayNotes(searchInput.value, currentCategory);
         }
     });
-
-    // displayNotes();
 });

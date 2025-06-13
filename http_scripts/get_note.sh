@@ -1,0 +1,1 @@
+curl "http://localhost:5000/notes?user_id=3"

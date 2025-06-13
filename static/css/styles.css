@@ -32,12 +32,11 @@ body {
 header {
     background-color: #6200ea;
     color: white;
-    height: 60px;
+    width: 100%;
 }
 
 .header-content {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     max-width: 1200px;
@@ -49,15 +48,12 @@ header h1 {
     margin: 0;
     text-align: center;
     flex-grow: 1;
-    order: 2;
-    padding: 0 10px;
     font-weight: bold;
 }
 
 .auth-buttons {
     display: flex;
     gap: 10px;
-    order: 3;
 }
 
 /* Общие стили для кнопок */
@@ -75,6 +71,7 @@ header h1 {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    min-width: 120px;
 }
 
 .btn-custom:hover {
@@ -85,20 +82,18 @@ header h1 {
 .exit-btn {
     background-color: #ff1744;
     border-color: white;
-    order: 3;
 }
 
 .create-btn {
     background-color: #6200ea;
     border-color: white;
-    order: 1;
+    margin-right: 10px;
 }
 
 /* Стили для посадочной страницы */
 .cta {
     text-align: center;
-    padding-top: 100px;
-    padding-bottom: 100px;
+    padding: 100px 15px;
 }
 
 .cta p {
@@ -146,16 +141,15 @@ header h1 {
 .notes-app-container {
     display: flex;
     justify-content: center;
-    min-height: 80vh;
     padding: 20px;
 }
 
 .main-container {
     display: flex;
     justify-content: center;
-    min-height: 80vh;
-    padding: 20px;
     width: 100%;
+    padding: 20px;
+    flex-direction: column;
 }
 
 .container-notes {
@@ -169,8 +163,7 @@ header h1 {
     border-radius: 10px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
     height: fit-content;
-    position: sticky;
-    top: 20px;
+    margin-bottom: 20px;
 }
 
 .notes-title {
@@ -191,12 +184,22 @@ header h1 {
     border-radius: 8px;
     transition: all 0.25s ease;
     font-size: 1rem;
+    cursor: pointer;
+}
+
+.categories-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.categories-list li.active {
+    background-color: #007bff;
+    color: white;
 }
 
 /* Основное содержимое */
 .notes-content {
-    padding-left: 25px;
-    /* Больший отступ от aside */
+    padding-left: 0;
+    flex-grow: 1;
 }
 
 .notes-search {
@@ -216,52 +219,13 @@ header h1 {
 
 /* Сетка заметок */
 .notes-grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 10px;
-}
-
-.notes-aside h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    list-style: none;
-}
-
-.notes-aside ul {
-    list-style: none;
-    padding: 0;
-}
-
-.notes-aside ul li {
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 5px;
-}
-
-.notes-aside ul li:hover {
-    background-color: #f0f0f0;
-}
-
-.notes-aside ul li.active {
-    background-color: #007bff;
-    color: white;
-}
-
-.notes-list-container {
-    padding: 0 15px;
-}
-
-.notes-list input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-bottom: 15px;
 }
 
 .note {
     background-color: white;
-    width: 100%;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 10px;
@@ -332,24 +296,81 @@ header h1 {
 }
 
 /* Адаптивные стили */
-@media (max-width: 992px) {
+@media (min-width: 768px) {
+    .header-content {
+        flex-wrap: nowrap;
+    }
+
+    header h1 {
+        order: 0;
+    }
+
+    .header-content>a:first-child {
+        order: 1;
+    }
+
+    .auth-buttons {
+        order: 2;
+    }
+
+    .main-container {
+        flex-direction: row;
+    }
+
     .notes-content {
-        padding-left: 0;
+        padding-left: 25px;
     }
 
     .notes-aside {
-        margin-bottom: 25px;
-        position: static;
+        margin-bottom: 0;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
+    .header-content {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 0;
+    }
+
+    header h1 {
+        margin: 10px 0;
+    }
+
+    .header-content>a,
+    .auth-buttons {
+        width: 100%;
+        justify-content: center;
+        margin: 5px 0;
+    }
+
+    .header-content>a:first-child {
+        order: 1;
+    }
+
+    .header-content h1 {
+        order: 2;
+    }
+
+    .auth-buttons {
+        order: 3;
+    }
+
     .main-container {
         padding: 15px;
     }
 
-    .notes-grid {
-        grid-template-columns: 1fr;
+    .notes-aside {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .notes-content {
+        padding: 0;
+    }
+
+    .cta p {
+        font-size: 1.5em;
     }
 }
 
@@ -360,5 +381,20 @@ header h1 {
 
     .notes-search {
         padding: 10px 15px;
+    }
+
+    .auth-form {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .edit-note-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .note .actions button {
+        width: 100%;
+        margin-bottom: 5px;
     }
 }

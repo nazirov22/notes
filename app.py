@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 import sqlite3
 from datetime import datetime
@@ -16,6 +16,13 @@ def hash_password(password):
     # return hashlib.sha256(password.encode()).hexdigest()
     return password  # Временно отключаем хэширование для тестов
 
+# Эндпоинт для получения user_id из куки
+@app.route('/get_user_id', methods=['GET'])
+def get_user_id():
+    user_id = request.cookies.get('user_id')
+    if user_id:
+        return jsonify({'user_id': user_id}), 200
+    return jsonify({'error': 'User not logged in'}), 401
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -49,7 +56,9 @@ def login():
     conn.close()
     
     if user:
-        return jsonify({'user_id': user['user_id'], 'message': 'Вход выполнен'}), 200
+        response = make_response(jsonify({'user_id': user['user_id'], 'message': 'Вход выполнен'}), 200)
+        response.set_cookie('user_id', str(user['user_id']), max_age=3600)  # Устанавливаем куки на 1 час
+        return response
     return jsonify({'error': 'Неверное имя пользователя или пароль'}), 401
 
 @app.route('/notes', methods=['POST'])

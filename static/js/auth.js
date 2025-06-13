@@ -6,7 +6,10 @@ export async function registerUser(username, email, password) {
         return;
     }
 
-    const response = await fetch('http://localhost:5000/register', {
+    // const response = await fetch('http://localhost:5000/register', {
+    const response = await fetch('/register', {
+
+
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })
@@ -26,7 +29,9 @@ export async function loginUser(username, password) {
         return;
     }
 
-    const response = await fetch('http://localhost:5000/login', {
+    // const response = await fetch('http://localhost:5000/login', {
+    const response = await fetch('/login', {
+
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -34,7 +39,7 @@ export async function loginUser(username, password) {
     const result = await response.json();
     if (response.ok) {
         alert(result.message);
-        localStorage.setItem('user_id', result.user_id);
+        document.cookie = `user_id=${result.user_id}; path=/`;
         redirectTo('notes.html');
     } else {
         alert(result.error);
