@@ -7,13 +7,12 @@ import hashlib
 app = Flask(__name__, static_folder='static', static_url_path='/')
 CORS(app)
 
-def get_db_connection():
-    conn = sqlite3.connect('notes.db')
+def get_db_connection(db_name='notes.db'):
+    conn = sqlite3.connect(db_name)
     conn.row_factory = sqlite3.Row
     return conn
 
 def hash_password(password):
-    # return hashlib.sha256(password.encode()).hexdigest()
     return password  # Временно отключаем хэширование для тестов
 
 # Эндпоинт для получения user_id из куки
@@ -24,6 +23,7 @@ def get_user_id():
         return jsonify({'user_id': user_id}), 200
     return jsonify({'error': 'User not logged in'}), 401
 
+# Регистрация
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -43,6 +43,7 @@ def register():
     finally:
         conn.close()
 
+# Вход
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -57,10 +58,11 @@ def login():
     
     if user:
         response = make_response(jsonify({'user_id': user['user_id'], 'message': 'Вход выполнен'}), 200)
-        response.set_cookie('user_id', str(user['user_id']), max_age=3600)  # Устанавливаем куки на 1 час
+        response.set_cookie('user_id', str(user['user_id']), max_age=3600)
         return response
     return jsonify({'error': 'Неверное имя пользователя или пароль'}), 401
 
+# Создание заметки
 @app.route('/notes', methods=['POST'])
 def create_note():
     data = request.get_json()
@@ -86,6 +88,7 @@ def create_note():
     conn.close()
     return jsonify({'message': 'Заметка создана', 'note_id': note_id}), 201
 
+# Получение заметок (оригинальный эндпоинт)
 @app.route('/notes', methods=['GET'])
 def get_notes():
     user_id = request.args.get('user_id')
@@ -118,6 +121,7 @@ def get_notes():
     conn.close()
     return jsonify(notes), 200
 
+# Обновление заметки
 @app.route('/notes/<int:note_id>', methods=['PUT'])
 def update_note(note_id):
     data = request.get_json()
@@ -143,6 +147,7 @@ def update_note(note_id):
     conn.close()
     return jsonify({'message': 'Заметка обновлена'}), 200
 
+# Удаление заметки
 @app.route('/notes/<int:note_id>', methods=['DELETE'])
 def delete_note(note_id):
     conn = get_db_connection()
@@ -152,6 +157,7 @@ def delete_note(note_id):
     conn.close()
     return jsonify({'message': 'Заметка удалена'}), 200
 
+# Получение категорий
 @app.route('/categories', methods=['GET'])
 def get_categories():
     conn = get_db_connection()
@@ -161,6 +167,7 @@ def get_categories():
     conn.close()
     return jsonify(categories), 200
 
+# Получение тегов
 @app.route('/tags', methods=['GET'])
 def get_tags():
     conn = get_db_connection()
@@ -170,9 +177,69 @@ def get_tags():
     conn.close()
     return jsonify(tags), 200
 
+# Сохранение запроса (из save_request.py)
+@app.route('/save', methods=['POST'])
+def save_request():
+    data = request.get_json()
+    request_text = str(data)
+    conn = get_db_connection('requests.db')
+    conn.execute('''CREATE TABLE IF NOT EXISTS Requests
+                    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                     request_text TEXT,
+                     timestamp DATETIME)''')
+    conn.execute('INSERT INTO Requests (request_text, timestamp) VALUES (?, ?)',
+                 (request_text, datetime.now()))
+    conn.commit()
+    conn.close()
+    return "Выполнено", 200
+
+# Обработка запросов заметок (из process_request.py)
+@app.route('/query', methods=['GET'])
+def query_notes():
+    user_id = request.args.get('user_id')
+    category_id = request.args.get('category_id')
+    search_query = request.args.get('search_query')
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = 'SELECT note_id, title, content FROM Note WHERE user_id = ? AND is_archived = 0'
+    params = [user_id]
+    if category_id:
+        query += ' AND category_id = ?'
+        params.append(category_id)
+    if search_query:
+        query += ' AND title LIKE ?'
+        params.append(f'%{search_query}%')
+    cursor.execute(query, params)
+    notes = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return {'notes': notes}, 200
+
+# Маршруты для статических HTML
 @app.route('/')
 def serve_index():
     return app.send_static_file('index.html')
+
+@app.route('/register')
+def serve_register():
+    return app.send_static_file('register.html')
+
+@app.route('/login')
+def serve_login():
+    return app.send_static_file('login.html')
+
+@app.route('/notes')
+def serve_notes():
+    return app.send_static_file('notes.html')
+
+@app.route('/edit-note')
+def serve_edit_note():
+    return app.send_static_file('edit-note.html')
+
+# Обработка всех остальных статических файлов
+@app.route('/<path:path>')
+def static_files(path):
+    return app.send_static_file(path)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

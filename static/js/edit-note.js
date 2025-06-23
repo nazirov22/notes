@@ -1,12 +1,5 @@
-import { redirectTo } from '/js/utils.js';
-
-// Функция для получения значения куки
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-}
+import { redirectTo } from './utils.js';
+import { getCookie } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const form = document.getElementById('noteForm');

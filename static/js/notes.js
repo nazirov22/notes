@@ -1,4 +1,5 @@
 import { redirectTo } from './utils.js';
+import { getCookie } from './utils.js';
 
 export async function displayNotes(filter = '', category_id = null) {
     const notesContainer = document.getElementById('notesContainer');
@@ -40,13 +41,6 @@ export async function displayNotes(filter = '', category_id = null) {
         `;
         notesContainer.appendChild(noteElement);
     });
-}
-
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
 }
 
 export function editNote(id) {
